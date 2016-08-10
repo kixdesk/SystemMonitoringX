@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<otrs_package version="1.1">
+    <CVS>$Id$</CVS>
+    <Name>SystemMonitoringX</Name>
+    <Version>5.0.1</Version>
+    <Framework>5.0.x</Framework>
+    <Vendor>c.a.p.e. IT GmbH</Vendor>
+    <URL>http://www.cape-it.de/</URL>
+    <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
+    <Description>Slightly extended mail interface to System Monitoring Suites. Also provides deeper integration to Nagios (Acknowledge on lock and Checkscript). Extended functions are support of Alias and Address as additional system monitoring mail contents as well as integrated queue assignement and automatic linking between SystemMonitoring-tickets and CIs.</Description>
+    <Filelist>
+        <File Permission="644" Location="Kernel/Config/Files/SystemMonitoringX.xml"/>
+        <File Permission="644" Location="Kernel/Config/Files/TicketAutoLinkConfigItem.xml"/>
+        <File Permission="644" Location="Kernel/Config/NagiosCheckX.pm.example"/>
+        <File Permission="644" Location="Kernel/System/Console/Command/Maint/SystemMonitoring/NagiosCheck.pm"/>
+        <File Permission="644" Location="Kernel/System/Console/Command/Maint/SystemMonitoring/NagiosCheckTicketCount.pm"/>
+        <File Permission="644" Location="Kernel/System/PostMaster/Filter/SystemMonitoringX.pm"/>
+        <File Permission="644" Location="Kernel/System/Ticket/Event/SystemMonitoringAcknowledgeX.pm"/>
+        <File Permission="644" Location="Kernel/System/Ticket/Event/TicketAutoLinkConfigItem.pm"/>
+        <File Permission="644" Location="doc/CHANGES_SystemMonitoringX.md"/>
+    <!--
+        <File Permission="644" Location="doc/SystemMonitoringX.txt"/>
+    -->
+        <File Permission="644" Location="doc/de/Doku_SystemMonitoringX.odt"/>
+        <File Permission="644" Location="doc/de/Doku_SystemMonitoringX.pdf"/>
+        <File Permission="644" Location="doc/en/SystemMonitoringX.pdf"/>
+        <File Permission="644" Location="doc/en/SystemMonitoringX.xml"/>
+        <File Permission="644" Location="scripts/test/Console/Command/Maint/System/NagiosCheck.t"/>
+        <File Permission="644" Location="scripts/test/Console/Command/Maint/System/NagiosCheckTicketCount.t"/>
+        <File Permission="644" Location="scripts/test/SystemMonitoringX.t"/>
+        <File Permission="644" Location="scripts/test/sample/NagiosCheckTestingX.pm"/>
+        <File Permission="644" Location="scripts/test/sample/SystemMonitoring1X.box"/>
+        <File Permission="644" Location="scripts/test/sample/SystemMonitoring1X_UP.box"/>
+        <File Permission="644" Location="var/packagesetup/SystemMonitoringX.pm"/>
+    </Filelist>
+    <CodeInstall Type="post"><![CDATA[
+    my $CodeModule = 'var::packagesetup::' . $Param{Structure}->{Name}->{Content};
+    $Kernel::OM->Get($CodeModule)->CodeInstall();
+    ]]>
+    </CodeInstall>
+    <CodeReinstall Type="post"><![CDATA[
+    my $CodeModule = 'var::packagesetup::' . $Param{Structure}->{Name}->{Content};
+    $Kernel::OM->Get($CodeModule)->CodeReinstall();
+    ]]>
+    </CodeReinstall>
+    <CodeUpgrade Type="post"><![CDATA[
+    my $CodeModule = 'var::packagesetup::' . $Param{Structure}->{Name}->{Content};
+    $Kernel::OM->ObjectsDiscard(
+        Objects            => [$CodeModule],
+        ForcePackageReload => 1,
+    );
+    $Kernel::OM->Get($CodeModule)->CodeUpgrade();
+    ]]>
+    </CodeUpgrade>
+    <CodeUninstall Type="pre"><![CDATA[
+    my $CodeModule = 'var::packagesetup::' . $Param{Structure}->{Name}->{Content};
+    $Kernel::OM->Get($CodeModule)->CodeUninstall();
+    ]]>
+    </CodeUninstall>
+    <IntroInstall Lang="en" Title="Using the SystemMonitoringX Module" Type="post"><![CDATA[
+        <br/>
+        <strong>WELCOME</strong>
+        <br/>
+        <br/>
+            You are about to install a slightly extended mail interface to System Monitoring Suites. Also provides deeper integration to Nagios (Acknowledge on lock and Checkscript).  <br/> <br/>
+            This package is built on/includes the original SystemMonitoring-Package by the OTRS AG. IF THE ORIGINAL OTRS-PACKAGE IS ALREADY INSTALLED, DEINSTALL IT FIRST!<br/> <br/>
+            Extended functions are: support of Alias and Address as additional system monitoring mail contents as well as integrated queue assignement and automatic linking between SystemMonitoring-tickets and CIs. <br/> <br/>
+            For configuration instructions please refer to the information in Doku_SystemMonitoringX.pdf. <br/> <br/>
+            In case you want to use the ticket auto link feature, please ensure you have OTRS::ITSM ConfigItem Managment installed and then activate  <i>;Ticket::EventModulePost###500-TicketAutoLinkConfigItem </i>.<br/> <br/>
+            <br/>
+            c.a.p.e. IT ...easy.<br/>
+        <br/>
+    ]]></IntroInstall>
+    <IntroUpgrade Type="pre" Title="Upgrade Information" Lang="en"><![CDATA[
+        <br/>
+        <strong>WELCOME</strong>
+        <br/>
+        <br/>
+        You are about to upgrade the SystemMonitoringX package for OTRS.<br/>
+        <br/>
+        <br/>
+        c.a.p.e. IT ...easy.<br/>
+        <br/>
+    ]]></IntroUpgrade>
+    <IntroUpgrade Type="post" Title="Upgrade Information" Lang="en"><![CDATA[
+        <br/>
+        <strong>Important Advice:</strong>
+        <br/>
+        <br/>
+        If you are using OTRS with modperl, the webserver must be restarted now. Please do this before you continue the use of this OTRS installation.
+        <br/>
+        <br/>
+        Furthermore you must also delete your OTRS-cache and rebuild your configuration before you continue the use of this OTRS installation.
+        <br/>
+        <br/>
+        With the new release there are some changes in conguration of the PostMasterFilters and the Acknowledge. <br/>
+        The PostmasterFilters will be migrated on upgrading package but the AcknowledgeConfiguration not. <br/>
+        Please check the documentation for more details!!!
+        <br/>
+        <br/>
+        c.a.p.e. IT ...easy.<br/>
+        <br/>
+    ]]></IntroUpgrade>
+</otrs_package>
